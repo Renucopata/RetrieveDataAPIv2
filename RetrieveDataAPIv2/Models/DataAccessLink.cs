@@ -9,7 +9,7 @@ namespace RetrieveDataAPIv2.Models
         {
             Response response = new Response();
             SqlDataAdapter queryAdapter = new SqlDataAdapter(
-                "select sit.sitrnntra, sit.sitrnnvia, sit.sitrncusr , sit.sitrnnomb, sit.sitrnndoc, sit.sitrnimpt, sit.sitrnuser, sit.sitrnhora, sit.sitrnftra, sit.sitrncser, si.sisevdesc, si.sisevcser, sit.sitrncmon from sitrn sit inner join sisev si on si.sisevcser  = sit.sitrncser  where sit.sitrnftra = '2019-06-23' and sit.sitrnnvia = 4014 and sit.sitrncvia = 1 order by si.sisevcser asc",
+                "select sit.sitrnntra, sit.sitrnnvia, sit.sitrncusr , sit.sitrnnomb, sit.sitrnndoc, sit.sitrnimpt, sit.sitrnuser, sit.sitrnhora, sit.sitrnftra, sit.sitrncser, si.sisevdesc, si.sisevcser, sit.sitrncmon from sitrn sit inner join sisev si on si.sisevcser  = sit.sitrncser  where sit.sitrnftra = '2019-06-23' and sit.sitrnnvia = 2 and sit.sitrncvia = 1 order by si.sisevcser asc",
                 connection);
             DataTable dt = new DataTable();
             List<CierreCajaInfo> cierreCajaInfoList = new List<CierreCajaInfo>();
@@ -38,6 +38,16 @@ namespace RetrieveDataAPIv2.Models
                     cierreCajaInfoList.Add(info);
                 }
             }
+
+            ConnectionHelper helper = new ConnectionHelper(connection);
+
+            if(!helper.isConnected())
+            {
+                response.Statuscode = 500;
+                response.StatusMessage = "Connection failed";
+                response.cierreCajaInfoList = null;
+            }
+           
             if(cierreCajaInfoList.Count > 0)
             {
                 response.Statuscode = 200;
